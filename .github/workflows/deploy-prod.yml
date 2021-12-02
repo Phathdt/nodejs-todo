@@ -26,6 +26,6 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          tags: |
-            phathdt379/express-todo:$GITHUB_SHA
+          tags: phathdt379/express-todo:1.7
+          # tags: phathdt379/express-todo:$GITHUB_SHA
           push: true
