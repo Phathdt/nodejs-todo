@@ -5,6 +5,10 @@ on:
     branches:
       - 'master'
 
+env:
+  TARGET_REPO: Phathdt/kustomize-todo
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo
+
 jobs:
   build:
     name:  build
@@ -27,7 +31,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:${{ steps.vars.outputs.sha_short }}
+          tags: $IMAGE_NAME:${{ steps.vars.outputs.sha_short }}
           push: true
 
   deploy:
@@ -50,7 +54,7 @@ jobs:
     - name: Update Kubernetes resources
       run: |
        cd base
-       kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:${{ steps.vars.outputs.sha_short }}
+       kustomize edit set image $IMAGE:${{ steps.vars.outputs.sha_short }}
        cd ..
        kustomize build overlays/prod > manifest/prod/manifest.yml
 
@@ -63,4 +67,5 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
+        repository: ${{ env.TARGET_REPO }}
         github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
