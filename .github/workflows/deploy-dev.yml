@@ -1,13 +1,13 @@
-name: Deploy production
+name: Deploy Dev
 
 on:
   push:
     branches:
-      - 'master'
+      - 'develop'
 
 env:
   TARGET_REPO: Phathdt/kustomize-todo
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ github.sha }}
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:dev-${{ github.sha }}
 
 jobs:
   build:
@@ -41,7 +41,7 @@ jobs:
       with:
         repository: Phathdt/kustomize-todo
         token: ${{ secrets.PAT_FOR_PUSH }}
-        ref: master
+        ref: develop
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
@@ -53,7 +53,7 @@ jobs:
        cd base
        kustomize edit set image $IMAGE_NAME
        cd ..
-       kustomize build overlays/prod > manifest/prod/manifest.yml
+       kustomize build overlays/dev> manifest/dev/manifest.yml
 
     - name: Commit files
       run: |
@@ -66,4 +66,4 @@ jobs:
       with:
         repository: ${{ env.TARGET_REPO }}
         github_token: ${{ secrets.PAT_FOR_PUSH }}
-        branch: master
+        branch: develop
