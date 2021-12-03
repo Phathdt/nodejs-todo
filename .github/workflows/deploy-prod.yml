@@ -10,7 +10,7 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     outputs:
-      IMAGE_NAME: phathdt379/express-todo:prod-${{ steps.vars.outputs.sha_short }}
+      SHA7: ${{ steps.vars.outputs.sha_short }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [prepare]
     env:
-      IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
+      SHA7: ${{ needs.prepare.outputs.SHA7 }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -39,7 +39,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ env.IMAGE_NAME }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ env.SHA7 }}
           push: true
 
   deploy:
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [prepare, build]
     env:
-      IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
+      SHA7: ${{ needs.prepare.outputs.SHA7 }}
     steps:
     - name: Check out code
       uses: actions/checkout@v2
@@ -64,7 +64,7 @@ jobs:
     - name: Update Kubernetes resources
       run: |
        cd overlays/prod
-       kustomize edit set image $IMAGE_NAME
+       kustomize edit set image $DOCKERHUB_USERNAME/express-todo:prod-$SHA7
        cd -
        kustomize build overlays/prod > manifest/prod/manifest.yml
 
@@ -73,7 +73,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git commit -am "Bump docker prod tag"
+        git commit -am "Bump docker prod tag $SHA7"
 
     - name: Push changes
       uses: ad-m/github-push-action@master
