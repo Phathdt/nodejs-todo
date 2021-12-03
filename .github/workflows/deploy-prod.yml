@@ -55,25 +55,24 @@ jobs:
       with:
         repository: ${{ secrets.TARGET_REPO }}
         token: ${{ secrets.PAT_FOR_PUSH }}
-        ref: master-build
+        ref: master
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
       with:
         kustomize-version: "4.4.1"
 
-    - name: Pulling code
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git pull origin master --allow-unrelated-histories --ff-only --no-edit
-
-    - name: Update Kubernetes resources and commit
+    - name: Update Kubernetes resources
       run: |
         cd overlays/prod
         kustomize edit set image $DOCKERHUB_USERNAME/express-todo:prod-$SHA7
         cd -
         kustomize build overlays/prod > manifest/prod/manifest.yml
+
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add .
         git commit -am "Bump docker prod tag $SHA7"
 
@@ -82,4 +81,4 @@ jobs:
       with:
         repository: ${{ secrets.TARGET_REPO }}
         github_token: ${{ secrets.PAT_FOR_PUSH }}
-        branch: master-build
+        branch: master
