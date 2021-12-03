@@ -50,7 +50,7 @@ jobs:
 
     - name: Update Kubernetes resources
       run: |
-       cd base
+       cd overlays/dev
        kustomize edit set image $IMAGE_NAME
        cd ..
        kustomize build overlays/dev > manifest/dev/manifest.yml
