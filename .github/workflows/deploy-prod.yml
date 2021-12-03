@@ -13,13 +13,11 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     outputs:
-      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ steps.short-sha.outputs.sha }}
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ steps.slug.outputs.sha_short }}
     steps:
-      - name: Parse short sha
-        uses: benjlevesque/short-sha@v1.1
-        id: short-sha
-        with:
-          length: 6
+      - name: Get short SHA
+        id: slug
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
   build:
     name: Build Image
