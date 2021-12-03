@@ -6,7 +6,7 @@ on:
       - 'master'
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${GITHUB_SHA::8}
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ GITHUB_SHA::8 }}
 
 jobs:
   build:
