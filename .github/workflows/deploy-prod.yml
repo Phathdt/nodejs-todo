@@ -48,6 +48,7 @@ jobs:
     needs: [prepare, build]
     env:
       SHA7: ${{ needs.prepare.outputs.SHA7 }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
     - name: Check out code
       uses: actions/checkout@v2
