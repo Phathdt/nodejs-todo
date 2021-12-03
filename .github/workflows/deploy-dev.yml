@@ -41,7 +41,7 @@ jobs:
       with:
         repository: Phathdt/kustomize-todo
         token: ${{ secrets.PAT_FOR_PUSH }}
-        ref: develop
+        ref: master
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
@@ -53,7 +53,7 @@ jobs:
        cd base
        kustomize edit set image $IMAGE_NAME
        cd ..
-       kustomize build overlays/dev> manifest/dev/manifest.yml
+       kustomize build overlays/dev > manifest/dev/manifest.yml
 
     - name: Commit files
       run: |
@@ -67,4 +67,4 @@ jobs:
       with:
         repository: ${{ env.TARGET_REPO }}
         github_token: ${{ secrets.PAT_FOR_PUSH }}
-        branch: develop
+        branch: master
