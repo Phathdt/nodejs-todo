@@ -15,6 +15,9 @@ jobs:
     outputs:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ steps.slug.outputs.sha_short }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
       - name: Get short SHA
         id: slug
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
