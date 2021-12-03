@@ -13,13 +13,13 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     outputs:
-      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ steps.slug.outputs.sha_short }}
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ steps.vars.outputs.sha_short }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Get short SHA
-        id: slug
+      - name: Set outputs
+        id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
   build:
