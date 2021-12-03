@@ -10,7 +10,7 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     outputs:
-      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/express-todo:prod-${{ steps.vars.outputs.sha_short }}
+      IMAGE_NAME: phathdt379/express-todo:prod-${{ steps.vars.outputs.sha_short }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
