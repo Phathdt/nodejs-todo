@@ -65,7 +65,7 @@ jobs:
       run: |
        cd overlays/prod
        kustomize edit set image $IMAGE_NAME
-       cd ...
+       cd -
        kustomize build overlays/prod > manifest/prod/manifest.yml
 
     - name: Commit files
