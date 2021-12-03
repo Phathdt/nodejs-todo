@@ -41,7 +41,7 @@ jobs:
       with:
         repository: Phathdt/kustomize-todo
         token: ${{ secrets.PAT_FOR_PUSH }}
-        ref: master
+        ref: develop
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
@@ -67,4 +67,4 @@ jobs:
       with:
         repository: ${{ env.TARGET_REPO }}
         github_token: ${{ secrets.PAT_FOR_PUSH }}
-        branch: master
+        branch: develop
